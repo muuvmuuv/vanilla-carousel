@@ -1,15 +1,14 @@
+import 'bootstrap/dist/css/bootstrap.css'
 import './style.scss'
 import './demo.scss'
-import 'bootstrap/dist/css/bootstrap.css'
 
 import Carousel from './carousel'
-import $ from './sizzle'
 
-const ele = $('.carousel-messtechnik-home')
+const ele = document.getElementsByClassName('carousel-messtechnik-home')[0]
 new Carousel(ele, {
-  autoplay: 2, // in seconds
+  autoplay: false,
   prev: true,
-  next: false,
+  next: true,
   progress: true,
   loop: false,
 })
