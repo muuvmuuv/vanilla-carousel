@@ -1,3 +1,44 @@
-.carousel {
-  padding: 20px;
+body {
+  padding: 50px;
+  font-family: 'Knewave', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+.carousel__items {
+  min-height: 50px;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .inner {
+      padding: 20px;
+      border: 5px solid #EEEEEE;
+    }
+  }
+}
+
+.carousel__controller {
+  .prev,
+  .next {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    font-weight: 700;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -10px;
+  }
+
+  .next {
+    right: -10px;
+  }
 }
