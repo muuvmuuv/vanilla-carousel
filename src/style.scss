@@ -1,0 +1,67 @@
+.carousel {
+  user-select: none;
+  transform: translate3d(0, 0, 0);
+  position: relative;
+}
+
+.carousel__items {
+  position: relative;
+  will-change: contents;
+  overflow: hidden;
+  height: 300px;
+
+  .item {
+    border: 1px solid silver;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    opacity: 0;
+    transition: all 200ms linear;
+    will-change: scroll-position, opacity;
+  
+    &.active {
+      z-index: 2;
+      opacity: 1;
+    }
+  }
+}
+
+.carousel__controller {
+  .progress {
+    width: 100%;
+    height: 5px;
+    display: grid;
+    grid-row: auto;
+    grid-auto-columns: 1fr;
+    grid-column-gap: 5px;
+    grid-auto-flow: column;
+    border-radius: 0;
+    background: none;
+    
+    .item {
+      background: #EEEEEE;
+
+      &.transition div {
+        transition: width 240ms ease;
+      }
+
+      div {
+        height: 100%;
+        width: 0%;
+        background: #467bff;
+      }
+    }
+  }
+
+  .prev,
+  .next {
+    cursor: pointer;
+  }
+}
