@@ -1,0 +1,72 @@
+@import '../src/carousel.scss';
+
+body {
+  padding: 50px;
+  font-family: 'Knewave', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+    sans-serif;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+.emoji {
+  font-family: Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+header {
+  h1 {
+    text-align: center;
+    color: $carousel-color-primary;
+  }
+
+  margin-bottom: 70px;
+}
+
+.carousel__items {
+  min-height: 50px;
+
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .inner {
+      padding: 20px;
+      border: 5px solid $carousel-color-shade;
+    }
+  }
+}
+
+.carousel__controller {
+  position: relative;
+
+  .progress {
+    margin-top: 10px;
+  }
+
+  .play,
+  .pause,
+  .stop {
+    margin: 10px 5px 0;
+    font-size: 20px;
+  }
+
+  .prev,
+  .next {
+    position: absolute;
+    top: -60px;
+    font-size: 24px;
+    font-weight: 700;
+    z-index: 10;
+  }
+
+  .prev {
+    left: -40px;
+  }
+
+  .next {
+    right: -40px;
+  }
+}

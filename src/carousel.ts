@@ -1,11 +1,33 @@
 import { timer } from './utils'
 
-/**
- * Carousel
- */
+export interface ICarousel {
+  autoplay: number | boolean
+  prev: string | boolean
+  next: string | boolean
+  progress: boolean
+  loop: boolean
+}
+
 export default class Carousel {
-  constructor(element, options) {
-    const defaults = {
+  public options: ICarousel
+
+  carousel: Element
+  controller: HTMLElement
+  items: NodeListOf<HTMLElement>
+  nodes: HTMLElement[]
+  maxLength: number
+  maxArrayLength: number
+  activeItem: HTMLElement
+
+  private _timeout: number | boolean = false
+  private _stop: boolean = false
+  private _paused: boolean = false
+  private _time: number = 0
+  private _running: boolean = false
+  private _call: NodeJS.Timeout
+
+  constructor(element: Element, options: ICarousel) {
+    const defaults: ICarousel = {
       autoplay: 0,
       prev: true,
       next: true,
@@ -15,7 +37,7 @@ export default class Carousel {
 
     this.options = { ...defaults, ...options }
     this.carousel = element
-    this.controller = this.carousel.querySelector('.carousel__controller')
+    this.controller = <HTMLElement>this.carousel.querySelector('.carousel__controller') // prettier-ignore
 
     this.items = this.carousel.querySelectorAll('.carousel__items .item')
     this.nodes = Array.from(this.items)
@@ -30,7 +52,7 @@ export default class Carousel {
       this.items[0].classList.add('active')
     }
 
-    this.activeItem = this.carousel.querySelector('.carousel__items .item.active')
+    this.activeItem = <HTMLElement>this.carousel.querySelector('.carousel__items .item.active') // prettier-ignore
 
     this.buildHeight()
     this.createKey() // just for developing to better diff the items
@@ -38,32 +60,62 @@ export default class Carousel {
   }
 
   async initCtrl() {
+    if (!this.controller) {
+      throw new Error(
+        'You must have a controller element if you want to use controlls!'
+      )
+    }
+
     // with progress
     if (this.options.progress) {
       await this.createProgress()
     }
 
     // on click
-    if (this.options.prev) {
-      await this.createPrev()
-      this.prevCtrl = this.controller.querySelector('.prev')
-      this.prevCtrl.addEventListener('click', () => {
+    if (this.options.prev && this.controller) {
+      let prevCtrl = this.controller.querySelector('.prev')
+      if (!prevCtrl) {
+        prevCtrl = await this.createPrev()
+      }
+      prevCtrl.addEventListener('click', () => {
         this.stop()
         this.prevItem()
       })
     }
-    if (this.options.next) {
-      await this.createNext()
-      this.nextCtrl = this.controller.querySelector('.next')
-      this.nextCtrl.addEventListener('click', () => {
+    if (this.options.next && this.controller) {
+      let nextCtrl = this.controller.querySelector('.next')
+      if (!nextCtrl) {
+        nextCtrl = await this.createNext()
+      }
+      nextCtrl.addEventListener('click', () => {
         this.stop()
         this.nextItem()
       })
     }
 
+    // on play, pause, stop
+    const play = <HTMLElement>this.controller.querySelector('.play')
+    if (play) {
+      play.addEventListener('click', () => {
+        this.play()
+      })
+    }
+    const pause = <HTMLElement>this.controller.querySelector('.pause')
+    if (pause) {
+      pause.addEventListener('click', () => {
+        this.pause()
+      })
+    }
+    const stop = <HTMLElement>this.controller.querySelector('.stop')
+    if (stop) {
+      stop.addEventListener('click', () => {
+        this.stop()
+      })
+    }
+
     // on mouse
-    this.carousel.addEventListener('mouseover', () => this.mouseOver())
-    //this.carousel.addEventListener('mouseout', () => this.mouseOut())
+    // this.carousel.addEventListener('mouseover', () => this.mouseOver())
+    // this.carousel.addEventListener('mouseout', () => this.mouseOut())
 
     // on autoplay
     if (this.options.autoplay) {
@@ -99,17 +151,17 @@ export default class Carousel {
   }
 
   pause() {
-    if (this._paused && !this._running) return // prevent multible calls
+    if (this._paused && !this._running) return // prevent multiple calls
     // prettier-ignore
     const pastTime = new Date().getTime() - this._time
-    this._timeout = Math.round(this._timeout - pastTime) + 1
+    this._timeout = Math.round(Number(this._timeout) - pastTime) + 1
     this._paused = true
     this._running = false
     this._time = 0
   }
 
   play() {
-    if (!this._paused && this._running) return // prevent multible calls
+    if (!this._paused && this._running) return // prevent multiple calls
     this._paused = false
     this.autoplayNext()
   }
@@ -126,7 +178,7 @@ export default class Carousel {
 
     // sleep
     let stp = 0
-    while (stp !== Math.round(this._timeout / 100)) {
+    while (stp !== Math.round(Number(this._timeout) / 100)) {
       await timer(100)
       if (this._stop || this._paused) return
       if (document.hidden) continue
@@ -150,6 +202,11 @@ export default class Carousel {
   stop() {
     this._stop = true
     this._running = false
+    const progressBarActive = this.controller.querySelector('.progress .item.active')
+    if (progressBarActive) {
+      const inner = progressBarActive.getElementsByTagName('div')[0]
+      inner.style.width = '0%'
+    }
     if (this.options.autoplay) {
       clearTimeout(this._call)
       this._call = setTimeout(() => {
@@ -160,41 +217,44 @@ export default class Carousel {
 
   createKey() {
     for (let i = 0; i < this.maxLength; i++) {
-      this.items[i].setAttribute('index', i)
+      this.items[i].setAttribute('index', i.toString())
     }
   }
 
   buildHeight() {
     let maxHeight = 0
     for (let i = 0; i < this.maxLength; i++) {
-      const height = this.items[i].getElementsByClassName('inner')[0].offsetHeight
+      const height = (<HTMLElement>this.items[i].getElementsByClassName('inner')[0])
+        .offsetHeight
       if (height > maxHeight) maxHeight = height
     }
-    console.log(maxHeight)
-
-    this.carousel.getElementsByClassName(
-      'carousel__items'
-    )[0].style.height = `${maxHeight}px`
+    // prettier-ignore
+    ;(<HTMLElement>this.carousel.getElementsByClassName('carousel__items')[0]).style.height = `${maxHeight}px`
   }
 
   createProgress() {
-    const progress = document.createElement('div')
-    progress.classList.add('progress')
-    const progressEle = this.controller.appendChild(progress)
+    let progress = this.controller.getElementsByClassName('progress')[0]
+    if (!progress) {
+      progress = document.createElement('div')
+      progress.classList.add('progress')
+      progress = this.controller.appendChild(progress)
+    }
     for (let i = 0; i < this.maxLength; i++) {
       const newProgressBarItem = document.createElement('div')
       newProgressBarItem.classList.add('item')
       const inner = document.createElement('div')
       newProgressBarItem.appendChild(inner)
-      progressEle.appendChild(newProgressBarItem)
+      progress.appendChild(newProgressBarItem)
     }
   }
 
-  async startProgress(index) {
-    const timeoutPrecent = Math.round((this._timeout / this.options.autoplay) * 100)
+  async startProgress(index: number) {
+    const timeoutPrecent = Math.round(
+      (Number(this._timeout) / Number(this.options.autoplay)) * 100
+    )
     let percent = timeoutPrecent === 100 ? 0 : (timeoutPrecent - 100) * -1
     while (percent <= 100) {
-      await timer(this.options.autoplay / 100)
+      await timer(Number(this.options.autoplay) / 100)
       if (this._stop) {
         this.moveProgress(0, index)
       }
@@ -209,8 +269,11 @@ export default class Carousel {
     }
   }
 
-  moveProgress(percent, index) {
+  moveProgress(percent: number, index: number) {
+    const progressBarActive = this.controller.querySelector('.progress .item.active')
+    if (progressBarActive) progressBarActive.classList.remove('acitve')
     const progressBar = this.controller.querySelectorAll('.progress .item')[index]
+    progressBar.classList.add('active')
     const inner = progressBar.getElementsByTagName('div')[0]
     progressBar.classList.remove('transition')
     inner.style.width = `${percent}%`
@@ -220,18 +283,18 @@ export default class Carousel {
     }
   }
 
-  createPrev() {
+  createPrev(): HTMLElement {
     const div = document.createElement('div')
     div.classList.add('prev')
-    if (typeof this.options.pref === 'string') {
+    if (typeof this.options.prev === 'string') {
       div.innerHTML = this.options.prev
     } else {
       div.innerText = '←'
     }
-    this.controller.appendChild(div)
+    return this.controller.appendChild(div)
   }
 
-  createNext() {
+  createNext(): HTMLElement {
     const div = document.createElement('div')
     div.classList.add('next')
     if (typeof this.options.next === 'string') {
@@ -239,7 +302,7 @@ export default class Carousel {
     } else {
       div.innerText = '→'
     }
-    this.controller.appendChild(div)
+    return this.controller.appendChild(div)
   }
 
   nextItem() {
