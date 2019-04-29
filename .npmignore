@@ -1,6 +1,9 @@
 .babelrc
 .prettierrc
+.prettierignore
+.cache/
 gulpfile.js
 tsconfig.json
 tslint.json
 demo/
+docs/
