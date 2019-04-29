@@ -1,11 +1,11 @@
 /*!
- * VanillaCarousel v1.4.0
+ * VanillaCarousel v1.5.0
  * https://github.com/muuvmuuv/vanilla-carousel
  *
  * Copyright 2019 Marvin Heilemann
  * Released under the MIT license
  *
- * Date: 2019-04-29T12:35:39.069Z
+ * Date: 2019-04-29T12:41:50.038Z
  */
 !(function(t, e) {
   'object' == typeof exports && 'undefined' != typeof module

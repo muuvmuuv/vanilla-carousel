@@ -11,15 +11,15 @@ styling and compatibility I recommend you to use Bootstrap or somethings similar
 
 include the one you need (all minified and compressed):
 
-- CommonJS: `vanilla-carousel/dist/carousel.common.js`
-- ESM: `vanilla-carousel/dist/carousel.esm.js`
-- ES6: `vanilla-carousel/dist/carousel.js`
+- CommonJS: `vanilla-carousel/dist/vanilla-carousel.common.js`
+- ESM: `vanilla-carousel/dist/vanilla-carousel.esm.js`
+- ES6: `vanilla-carousel/dist/vanilla-carousel.js`
 
 ```js
-import Carousel from 'vanilla-carousel'
+import VanillaCarousel from 'vanilla-carousel'
 
 const ele = document.getElementsByClassName('carousel')[0]
-new Carousel(ele, {
+new VanillaCarousel(ele, {
   autoplay: false,
   prev: true,
   next: true,

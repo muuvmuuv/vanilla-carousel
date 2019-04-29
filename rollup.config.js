@@ -8,7 +8,6 @@ const { writeFileSync } = require('fs')
 const pkg = require('./package.json')
 
 const name = changeCase.pascalCase(pkg.name)
-const fileName = 'carousel'
 const banner = createBanner({
   data: {
     name: name,
@@ -21,23 +20,23 @@ module.exports = {
     {
       banner,
       name,
-      file: `dist/${fileName}.js`,
+      file: `dist/${pkg.name}.js`,
       format: 'umd',
     },
     {
       banner,
-      file: `dist/${fileName}.common.js`,
+      file: `dist/${pkg.name}.common.js`,
       format: 'cjs',
     },
     {
       banner,
-      file: `dist/${fileName}.esm.js`,
+      file: `dist/${pkg.name}.esm.js`,
       format: 'esm',
     },
     {
       banner,
       name,
-      file: `docs/${fileName}.js`,
+      file: `docs/${pkg.name}.js`,
       format: 'umd',
     },
   ],
@@ -46,8 +45,8 @@ module.exports = {
       failOnError: true,
       outputStyle: 'compressed',
       output: styles => {
-        writeFileSync(`dist/${fileName}.css`, styles)
-        writeFileSync(`docs/${fileName}.css`, styles)
+        writeFileSync(`dist/${pkg.name}.css`, styles)
+        writeFileSync(`docs/${pkg.name}.css`, styles)
       },
     }),
     typescript(),

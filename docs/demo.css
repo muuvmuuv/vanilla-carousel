@@ -49,15 +49,15 @@ header .badges img {
   margin-top: 10px;
 }
 
-.carousel__controller .progress .play,
-.carousel__controller .progress .pause,
-.carousel__controller .progress .stop {
+.carousel__controller .play,
+.carousel__controller .pause,
+.carousel__controller .stop {
   margin: 10px 5px 0;
   font-size: 20px;
 }
 
-.carousel__controller .progress .prev,
-.carousel__controller .progress .next {
+.carousel__controller .prev,
+.carousel__controller .next {
   position: absolute;
   top: -60px;
   font-size: 24px;
@@ -65,10 +65,10 @@ header .badges img {
   z-index: 10;
 }
 
-.carousel__controller .progress .prev {
+.carousel__controller .prev {
   left: -40px;
 }
 
-.carousel__controller .progress .next {
+.carousel__controller .next {
   right: -40px;
 }
