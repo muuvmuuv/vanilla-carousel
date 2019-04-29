@@ -1,19 +1,22 @@
 # Vanilla Carousel 🎠
 
 A simple, small (1.86kb) and easy to use plain vanilla carousel.
+([Demo](https://muuvmuuv.github.io/vanilla-carousel/))
 
 ## How to use
 
-Have a look at our [doc](./docs) files, e.g. [demo.js](./docs/demo.js). For better
-styling and compatibility I recommend you to use Bootstrap or somethings similar.
+Have a look at our [documentation](./docs) files, e.g. [demo.js](./docs/demo.js). For
+better styling I recommend you to use Bootstrap or somethings similar.
 
 ### JavaScript
 
 include the one you need (all minified and compressed):
 
-- CommonJS: `vanilla-carousel/dist/vanilla-carousel.common.js`
-- ESM: `vanilla-carousel/dist/vanilla-carousel.esm.js`
-- ES6: `vanilla-carousel/dist/vanilla-carousel.js`
+- CommonJS:
+  [`vanilla-carousel/dist/vanilla-carousel.common.js`](./dist/vanilla-carousel.common.js)
+- ESM:
+  [`vanilla-carousel/dist/vanilla-carousel.esm.js`](./dist/vanilla-carousel.esm.js)
+- ES6: [`vanilla-carousel/dist/vanilla-carousel.js`](./dist/vanilla-carousel.js)
 
 ```js
 import VanillaCarousel from 'vanilla-carousel'
@@ -36,9 +39,7 @@ new VanillaCarousel(ele, {
     <div class="item">ITEM1</div>
     <div class="item">ITEM2</div>
   </div>
-  <div class="container">
-    <div class="row no-gutters carousel__controller"></div>
-  </div>
+  <div class="carousel__controller"></div>
 </div>
 ```
 
