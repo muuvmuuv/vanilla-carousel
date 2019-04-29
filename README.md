@@ -1,6 +1,6 @@
 # Vanilla Carousel 🎠
 
-A simple easy to use plain vanilla carousel.
+A simple, small (2.17kb) and easy to use plain vanilla carousel.
 
 ## How to use
 

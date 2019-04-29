@@ -15,12 +15,18 @@ h2 {
 }
 
 header {
+  margin-bottom: 70px;
+
   h1 {
     text-align: center;
     color: $carousel-color-primary;
   }
 
-  margin-bottom: 70px;
+  .badges {
+    img {
+      margin: 0 5px;
+    }
+  }
 }
 
 .carousel__items {
