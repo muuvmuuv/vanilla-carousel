@@ -1,3 +1,5 @@
+import './style.scss'
+
 import { timer } from './utils'
 
 export interface ICarousel {
@@ -228,8 +230,7 @@ export default class Carousel {
         .offsetHeight
       if (height > maxHeight) maxHeight = height
     }
-    // prettier-ignore
-    ;(<HTMLElement>this.carousel.getElementsByClassName('carousel__items')[0]).style.height = `${maxHeight}px`
+    ;(<HTMLElement>this.carousel.getElementsByClassName('carousel__items')[0]).style.height = `${maxHeight}px` // prettier-ignore
   }
 
   createProgress() {

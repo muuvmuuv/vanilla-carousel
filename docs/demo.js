@@ -1,6 +1,3 @@
-import Carousel from '../src/carousel'
-
-// onload
 ;(() => {
   const ele = document.getElementsByClassName('carousel')[0]
   new Carousel(ele, {

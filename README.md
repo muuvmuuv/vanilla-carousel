@@ -1,20 +1,24 @@
 # Vanilla Carousel 🎠
 
-A simple, small (2.17kb) and easy to use plain vanilla carousel.
+A simple, small (1.86kb) and easy to use plain vanilla carousel.
 
 ## How to use
 
-Have a look at the examples below or on our [demo](./demo) files, e.g.
-[demo.js](./dist/demo.js). For better styling and compatibility I recommend you to
-use Bootstrap or somethings similar.
+Have a look at our [doc](./docs) files, e.g. [demo.js](./docs/demo.js). For better
+styling and compatibility I recommend you to use Bootstrap or somethings similar.
 
 ### JavaScript
 
+include the one you need (all minified and compressed):
+
+- CommonJS: `vanilla-carousel/dist/carousel.common.js`
+- ESM: `vanilla-carousel/dist/carousel.esm.js`
+- ES6: `vanilla-carousel/dist/carousel.js`
+
 ```js
-import Carousel from '../src/carousel'
+import Carousel from 'vanilla-carousel'
 
 const ele = document.getElementsByClassName('carousel')[0]
-
 new Carousel(ele, {
   autoplay: false,
   prev: true,

@@ -1,0 +1,74 @@
+body {
+  padding: 50px;
+  font-family: 'Knewave', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+    sans-serif;
+}
+
+h2 {
+  margin-bottom: 0;
+}
+
+.emoji {
+  font-family: Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+header {
+  margin-bottom: 70px;
+}
+
+header h1 {
+  text-align: center;
+  color: #ffc541;
+}
+
+header .badges img {
+  margin: 0 5px;
+}
+
+.carousel__items {
+  min-height: 50px;
+}
+
+.carousel__items .item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.carousel__items .item .inner {
+  padding: 20px;
+  border: 5px solid #eeeeee;
+}
+
+.carousel__controller {
+  position: relative;
+}
+
+.carousel__controller .progress {
+  margin-top: 10px;
+}
+
+.carousel__controller .progress .play,
+.carousel__controller .progress .pause,
+.carousel__controller .progress .stop {
+  margin: 10px 5px 0;
+  font-size: 20px;
+}
+
+.carousel__controller .progress .prev,
+.carousel__controller .progress .next {
+  position: absolute;
+  top: -60px;
+  font-size: 24px;
+  font-weight: 700;
+  z-index: 10;
+}
+
+.carousel__controller .progress .prev {
+  left: -40px;
+}
+
+.carousel__controller .progress .next {
+  right: -40px;
+}
