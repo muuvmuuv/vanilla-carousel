@@ -1,6 +1,6 @@
 import './style.scss'
 
-import { timer } from './utils'
+import { timer, visibilityChange } from './utils'
 
 export interface ICarousel {
   autoplay: number | boolean
@@ -8,6 +8,8 @@ export interface ICarousel {
   next: string | boolean
   progress: boolean
   loop: boolean
+  pauseOnHover: boolean
+  keyboardNav: boolean
 }
 
 export default class Carousel {
@@ -15,12 +17,14 @@ export default class Carousel {
 
   carousel: Element
   controller: HTMLElement
-  items: NodeListOf<HTMLElement>
-  nodes: HTMLElement[]
+  items: HTMLCollectionOf<Element>
+  itemsEle: Element
+  nodes: Element[]
   maxLength: number
   maxArrayLength: number
-  activeItem: HTMLElement
+  activeItem: Element
 
+  private _hidden: boolean = false
   private _timeout: number | boolean = false
   private _stop: boolean = false
   private _paused: boolean = false
@@ -31,17 +35,25 @@ export default class Carousel {
   constructor(element: Element, options: ICarousel) {
     const defaults: ICarousel = {
       autoplay: 0,
-      prev: true,
-      next: true,
+      prev: false,
+      next: false,
       progress: false,
       loop: false,
+      pauseOnHover: false,
+      keyboardNav: false,
     }
 
     this.options = { ...defaults, ...options }
     this.carousel = element
     this.controller = <HTMLElement>this.carousel.querySelector('.carousel__controller') // prettier-ignore
 
-    this.items = this.carousel.querySelectorAll('.carousel__items .item')
+    const itemsEle = this.carousel.querySelector('.carousel__items')
+    if (!itemsEle) {
+      throw new Error("Please create a `carousel__items` element with `item`'s!")
+    }
+    this.itemsEle = itemsEle
+
+    this.items = this.itemsEle.getElementsByClassName('item')
     this.nodes = Array.from(this.items)
     this.maxLength = this.items.length
     this.maxArrayLength = this.maxLength - 1
@@ -54,11 +66,24 @@ export default class Carousel {
       this.items[0].classList.add('active')
     }
 
-    this.activeItem = <HTMLElement>this.carousel.querySelector('.carousel__items .item.active') // prettier-ignore
+    this.activeItem = <HTMLElement>this.itemsEle.querySelector('.item.active') // prettier-ignore
 
     this.buildHeight()
     this.createKey() // just for developing to better diff the items
     this.initCtrl()
+    this.onHiddenDocument()
+  }
+
+  async onHiddenDocument() {
+    visibilityChange(hidden => {
+      if (hidden) {
+        console.log('STOP')
+        this.stop(true)
+      } else {
+        console.log('PLAY')
+        this.autoplay()
+      }
+    })
   }
 
   async initCtrl() {
@@ -116,8 +141,24 @@ export default class Carousel {
     }
 
     // on mouse
-    // this.carousel.addEventListener('mouseover', () => this.mouseOver())
-    // this.carousel.addEventListener('mouseout', () => this.mouseOut())
+    this.itemsEle.addEventListener('mouseenter', e => this.mouseOver(e), true)
+    this.itemsEle.addEventListener('mouseleave', e => this.mouseOut(e), true)
+
+    // on keyboard
+    if (this.options.keyboardNav) {
+      document.addEventListener('keydown', event => {
+        switch (event.keyCode) {
+          case 37:
+            this.stop()
+            this.prevItem()
+            break
+          case 39:
+            this.stop()
+            this.nextItem()
+            break
+        }
+      })
+    }
 
     // on autoplay
     if (this.options.autoplay) {
@@ -131,12 +172,14 @@ export default class Carousel {
     }
   }
 
-  mouseOver() {
-    console.log('PAUSE')
+  mouseOver(event: any) {
+    if (event.target !== this.itemsEle) return
+    this.pause()
   }
 
-  mouseOut() {
-    console.log('START')
+  mouseOut(event: any) {
+    if (event.target !== this.itemsEle) return
+    this.play()
   }
 
   read() {
@@ -153,8 +196,7 @@ export default class Carousel {
   }
 
   pause() {
-    if (this._paused && !this._running) return // prevent multiple calls
-    // prettier-ignore
+    if (this._paused || !this._running) return // prevent multiple calls
     const pastTime = new Date().getTime() - this._time
     this._timeout = Math.round(Number(this._timeout) - pastTime) + 1
     this._paused = true
@@ -163,8 +205,9 @@ export default class Carousel {
   }
 
   play() {
-    if (!this._paused && this._running) return // prevent multiple calls
+    if (!this._paused || this._running) return // prevent multiple calls
     this._paused = false
+    this._stop = false
     this.autoplayNext()
   }
 
@@ -183,7 +226,6 @@ export default class Carousel {
     while (stp !== Math.round(Number(this._timeout) / 100)) {
       await timer(100)
       if (this._stop || this._paused) return
-      if (document.hidden) continue
       stp++
     }
 
@@ -201,16 +243,17 @@ export default class Carousel {
     }
   }
 
-  stop() {
+  stop(noPlay: boolean = false) {
+    clearTimeout(this._call)
     this._stop = true
     this._running = false
+    this._paused = false
     const progressBarActive = this.controller.querySelector('.progress .item.active')
     if (progressBarActive) {
       const inner = progressBarActive.getElementsByTagName('div')[0]
       inner.style.width = '0%'
     }
-    if (this.options.autoplay) {
-      clearTimeout(this._call)
+    if (this.options.autoplay && !noPlay) {
       this._call = setTimeout(() => {
         this.autoplay()
       }, 1000)
@@ -258,9 +301,6 @@ export default class Carousel {
       await timer(Number(this.options.autoplay) / 100)
       if (this._stop) {
         this.moveProgress(0, index)
-      }
-      if (document.hidden) {
-        continue
       }
       if (this._stop || this._paused) {
         break

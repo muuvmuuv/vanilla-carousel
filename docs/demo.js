@@ -6,5 +6,7 @@ window.onload = function() {
     next: true,
     progress: true,
     loop: true,
+    pauseOnHover: true,
+    keyboardNav: true,
   })
 }

@@ -1,12 +1,16 @@
 {
   "name": "vanilla-carousel",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A simple easy to use plain vanilla carousel.",
   "keywords": [
     "carousel",
     "vanilla"
   ],
   "homepage": "https://github.com/muuvmuuv/vanilla-carousel",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/muuvmuuv/vanilla-carousel.git"
+  },
   "license": "MIT",
   "author": {
     "name": "Marvin Heilemann",
@@ -15,8 +19,10 @@
   },
   "main": "./dist/vanilla-carousel",
   "scripts": {
+    "build": "rollup -cm",
+    "open": "open ./docs/index.html",
     "pretty": "pretty-quick",
-    "build": "rollup -c",
+    "prepublish": "npm run build",
     "start": "rollup -cmw"
   },
   "husky": {
@@ -27,20 +33,20 @@
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
-    "@types/node": "^11.13.8",
+    "@types/node": "^11.13.10",
     "change-case": "^3.1.0",
     "create-banner": "^1.0.0",
-    "husky": "^2.1.0",
+    "husky": "^2.2.0",
     "prettier": "^1.17.0",
     "pretty-quick": "^1.10.0",
     "rimraf": "^2.6.3",
-    "rollup": "^1.10.1",
+    "rollup": "^1.11.3",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-scss": "^1.0.1",
     "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript": "^1.0.1",
     "rollup-watch": "^4.3.1",
-    "sass": "^1.19.0",
+    "sass": "^1.20.1",
     "tslib": "^1.9.3",
     "typescript": "^3.4.5"
   }

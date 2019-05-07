@@ -1,11 +1,11 @@
 /*!
- * VanillaCarousel v1.5.0
+ * VanillaCarousel v1.6.0
  * https://github.com/muuvmuuv/vanilla-carousel
  *
  * Copyright 2019 Marvin Heilemann
  * Released under the MIT license
  *
- * Date: 2019-04-29T12:41:50.038Z
+ * Date: 2019-05-07T14:42:29.821Z
  */
 !(function(t, e) {
   'object' == typeof exports && 'undefined' != typeof module
@@ -16,19 +16,19 @@
 })(this, function() {
   'use strict'
   function t(t, e, s, i) {
-    return new (s || (s = Promise))(function(o, r) {
-      function n(t) {
+    return new (s || (s = Promise))(function(o, n) {
+      function r(t) {
         try {
           h(i.next(t))
         } catch (t) {
-          r(t)
+          n(t)
         }
       }
       function a(t) {
         try {
           h(i.throw(t))
         } catch (t) {
-          r(t)
+          n(t)
         }
       }
       function h(t) {
@@ -36,7 +36,7 @@
           ? o(t.value)
           : new s(function(e) {
               e(t.value)
-            }).then(n, a)
+            }).then(r, a)
       }
       h((i = i.apply(t, e || [])).next())
     })
@@ -46,20 +46,33 @@
   }
   return class {
     constructor(t, e) {
-      if (
-        ((this._timeout = !1),
+      ;(this._hidden = !1),
+        (this._timeout = !1),
         (this._stop = !1),
         (this._paused = !1),
         (this._time = 0),
         (this._running = !1),
         (this.options = Object.assign(
           {},
-          { autoplay: 0, prev: !0, next: !0, progress: !1, loop: !1 },
+          {
+            autoplay: 0,
+            prev: !1,
+            next: !1,
+            progress: !1,
+            loop: !1,
+            pauseOnHover: !1,
+            keyboardNav: !1,
+          },
           e
         )),
         (this.carousel = t),
-        (this.controller = this.carousel.querySelector('.carousel__controller')),
-        (this.items = this.carousel.querySelectorAll('.carousel__items .item')),
+        (this.controller = this.carousel.querySelector('.carousel__controller'))
+      const s = this.carousel.querySelector('.carousel__items')
+      if (!s)
+        throw new Error("Please create a `carousel__items` element with `item`'s!")
+      if (
+        ((this.itemsEle = s),
+        (this.items = this.itemsEle.getElementsByClassName('item')),
         (this.nodes = Array.from(this.items)),
         (this.maxLength = this.items.length),
         (this.maxArrayLength = this.maxLength - 1),
@@ -68,12 +81,28 @@
         throw new Error('You must have at least two items in your carousel!')
       this.carousel.querySelector('.carousel__items .item.active') ||
         this.items[0].classList.add('active'),
-        (this.activeItem = this.carousel.querySelector(
-          '.carousel__items .item.active'
-        )),
+        (this.activeItem = this.itemsEle.querySelector('.item.active')),
         this.buildHeight(),
         this.createKey(),
-        this.initCtrl()
+        this.initCtrl(),
+        this.onHiddenDocument()
+    }
+    onHiddenDocument() {
+      return t(this, void 0, void 0, function*() {
+        var t
+        ;(t = t => {
+          t
+            ? (console.log('STOP'), this.stop(!0))
+            : (console.log('PLAY'), this.autoplay())
+        }),
+          document.addEventListener(
+            'visibilitychange',
+            function() {
+              document.hidden ? t(!0) : t(!1)
+            },
+            !1
+          )
+      })
     }
     initCtrl() {
       return t(this, void 0, void 0, function*() {
@@ -113,6 +142,18 @@
           s.addEventListener('click', () => {
             this.stop()
           }),
+          this.itemsEle.addEventListener('mouseenter', t => this.mouseOver(t), !0),
+          this.itemsEle.addEventListener('mouseleave', t => this.mouseOut(t), !0),
+          this.options.keyboardNav &&
+            document.addEventListener('keydown', t => {
+              switch (t.keyCode) {
+                case 37:
+                  this.stop(), this.prevItem()
+                  break
+                case 39:
+                  this.stop(), this.nextItem()
+              }
+            }),
           this.options.autoplay &&
             ('number' != typeof this.options.autoplay
               ? console.error('Autoplay must be type of number!')
@@ -121,11 +162,11 @@
               : this.autoplay())
       })
     }
-    mouseOver() {
-      console.log('PAUSE')
+    mouseOver(t) {
+      t.target === this.itemsEle && this.pause()
     }
-    mouseOut() {
-      console.log('START')
+    mouseOut(t) {
+      t.target === this.itemsEle && this.play()
     }
     read() {
       return new Date().getTime() - this._time
@@ -139,7 +180,7 @@
         this.autoplayNext()
     }
     pause() {
-      if (this._paused && !this._running) return
+      if (this._paused || !this._running) return
       const t = new Date().getTime() - this._time
       ;(this._timeout = Math.round(Number(this._timeout) - t) + 1),
         (this._paused = !0),
@@ -147,7 +188,9 @@
         (this._time = 0)
     }
     play() {
-      ;(!this._paused && this._running) || ((this._paused = !1), this.autoplayNext())
+      this._paused &&
+        !this._running &&
+        ((this._paused = !1), (this._stop = !1), this.autoplayNext())
     }
     autoplayNext() {
       return t(this, void 0, void 0, function*() {
@@ -158,7 +201,7 @@
         let s = 0
         for (; s !== Math.round(Number(this._timeout) / 100); ) {
           if ((yield e(100), this._stop || this._paused)) return
-          document.hidden || s++
+          s++
         }
         ;(this._running = !1),
           (this._timeout = this.options.autoplay),
@@ -168,15 +211,18 @@
             (this.nextItem(), this.autoplay())
       })
     }
-    stop() {
-      ;(this._stop = !0), (this._running = !1)
-      const t = this.controller.querySelector('.progress .item.active')
-      t && (t.getElementsByTagName('div')[0].style.width = '0%'),
+    stop(t = !1) {
+      clearTimeout(this._call),
+        (this._stop = !0),
+        (this._running = !1),
+        (this._paused = !1)
+      const e = this.controller.querySelector('.progress .item.active')
+      e && (e.getElementsByTagName('div')[0].style.width = '0%'),
         this.options.autoplay &&
-          (clearTimeout(this._call),
+          !t &&
           (this._call = setTimeout(() => {
             this.autoplay()
-          }, 1e3)))
+          }, 1e3))
     }
     createKey() {
       for (let t = 0; t < this.maxLength; t++)
@@ -210,15 +256,15 @@
           (Number(this._timeout) / Number(this.options.autoplay)) * 100
         )
         let i = 100 === t ? 0 : -1 * (t - 100)
-        for (; i <= 100; )
-          if (
-            (yield e(Number(this.options.autoplay) / 100),
-            this._stop && this.moveProgress(0, s),
-            !document.hidden)
-          ) {
-            if (this._stop || this._paused) break
-            this.moveProgress(i, s), i++
-          }
+        for (
+          ;
+          i <= 100 &&
+          (yield e(Number(this.options.autoplay) / 100),
+          this._stop && this.moveProgress(0, s),
+          !this._stop && !this._paused);
+
+        )
+          this.moveProgress(i, s), i++
       })
     }
     moveProgress(t, e) {
@@ -269,3 +315,4 @@
     }
   }
 })
+//# sourceMappingURL=vanilla-carousel.js.map

@@ -2,7 +2,6 @@ $carousel-color-primary: #ffc541 !default;
 $carousel-color-shade: #eeeeee !default;
 
 .carousel {
-  user-select: none;
   transform: translate3d(0, 0, 0);
   position: relative;
 }
@@ -32,11 +31,12 @@ $carousel-color-shade: #eeeeee !default;
 }
 
 .carousel__controller {
+  user-select: none;
+
   .progress {
     width: 100%;
     height: 5px;
     display: grid;
-    grid-area: progress;
     grid-row: auto;
     grid-auto-columns: 1fr;
     grid-column-gap: 5px;

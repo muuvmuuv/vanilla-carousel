@@ -1,7 +1,9 @@
 # Vanilla Carousel 🎠
 
-A simple, small (1.86kb) and easy to use plain vanilla carousel.
-([Demo](https://muuvmuuv.github.io/vanilla-carousel/))
+A simple, small (1.86kb) and easy to use plain vanilla carousel. See the
+[Demo](https://muuvmuuv.github.io/vanilla-carousel/) or a live example on
+[www.additive-net.de](https://www.additive.lcl/de/messtechnik-sensorik) or
+[www.m8finder.net](https://www.m8finder.net/).
 
 ## How to use
 
@@ -58,10 +60,12 @@ controllers are provided:
 
 ### Options
 
-| Option     | Default | Type              | Description                                                                                                   |
-| ---------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
-| `autoplay` | `false` | boolean \| number | Wanna autoplay your carousel? Set it to true or a number for milliseconds it should take to fade to the next! |
-| `prev`     | `true`  | boolean           | Give the user an option to go back in your carousel! Give it a string to personalize it.                      |
-| `next`     | `true`  | boolean           | Give the user an option to go to the next in your carousel! Give it a string to personalize it.               |
-| `progress` | `false` | boolean           | Set this to true if you want to have progress bars below the carousel.                                        |
-| `loop`     | `false` | boolean           | Do you want to loop the carousel so it's started from the beginning at the end? Set it to true!               |
+| Option         | Default | Type              | Description                                                                                                   |
+| -------------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
+| `autoplay`     | `false` | boolean \| number | Wanna autoplay your carousel? Set it to true or a number for milliseconds it should take to fade to the next! |
+| `prev`         | `false` | boolean           | Give the user an option to go back in your carousel! Give it a string to personalize it.                      |
+| `next`         | `false` | boolean           | Give the user an option to go to the next in your carousel! Give it a string to personalize it.               |
+| `progress`     | `false` | boolean           | Set this to true if you want to have progress bars below the carousel.                                        |
+| `loop`         | `false` | boolean           | Do you want to loop the carousel so it's started from the beginning at the end? Set it to true!               |
+| `pauseOnHover` | `false` | boolean           | Whenever someone hovers over the carousel, it pauses. (WIP)                                                   |
+| `keyboardNav`  | `false` | boolean           | Let the user navigate through your carousel via the keyboard <kbd>→</kbd> <kbd>←</kbd>.                       |

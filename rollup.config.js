@@ -55,7 +55,7 @@ module.exports = {
     }),
     terser({
       output: {
-        comments: (node, { type, value }) => {
+        comments: (_, { type, value }) => {
           if (type == 'comment2') {
             return new RegExp('VanillaCarousel').test(value)
           }
