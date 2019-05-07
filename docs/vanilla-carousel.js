@@ -1,11 +1,11 @@
 /*!
- * VanillaCarousel v1.6.0
+ * VanillaCarousel v1.6.2
  * https://github.com/muuvmuuv/vanilla-carousel
  *
  * Copyright 2019 Marvin Heilemann
  * Released under the MIT license
  *
- * Date: 2019-05-07T14:42:29.821Z
+ * Date: 2019-05-07T14:45:56.820Z
  */
 !(function(t, e) {
   'object' == typeof exports && 'undefined' != typeof module
@@ -91,9 +91,7 @@
       return t(this, void 0, void 0, function*() {
         var t
         ;(t = t => {
-          t
-            ? (console.log('STOP'), this.stop(!0))
-            : (console.log('PLAY'), this.autoplay())
+          t ? this.stop(!0) : this.autoplay()
         }),
           document.addEventListener(
             'visibilitychange',

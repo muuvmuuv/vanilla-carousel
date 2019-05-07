@@ -77,10 +77,8 @@ export default class Carousel {
   async onHiddenDocument() {
     visibilityChange(hidden => {
       if (hidden) {
-        console.log('STOP')
         this.stop(true)
       } else {
-        console.log('PLAY')
         this.autoplay()
       }
     })

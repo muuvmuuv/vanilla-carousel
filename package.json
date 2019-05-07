@@ -1,6 +1,6 @@
 {
   "name": "vanilla-carousel",
-  "version": "1.6.0",
+  "version": "1.6.2",
   "description": "A simple easy to use plain vanilla carousel.",
   "keywords": [
     "carousel",
@@ -21,8 +21,8 @@
   "scripts": {
     "build": "rollup -cm",
     "open": "open ./docs/index.html",
+    "prepublishOnly": "npm run build",
     "pretty": "pretty-quick",
-    "prepublish": "npm run build",
     "start": "rollup -cmw"
   },
   "husky": {
