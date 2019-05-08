@@ -5,7 +5,7 @@
  * Copyright 2019 Marvin Heilemann
  * Released under the MIT license
  *
- * Date: 2019-05-08T11:46:11.005Z
+ * Date: 08.05.2019
  */
 !(function(t, e) {
   'object' == typeof exports && 'undefined' != typeof module
