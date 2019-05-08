@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = () => {
   const ele = document.getElementsByClassName('carousel')[0]
   new VanillaCarousel(ele, {
     autoplay: 2000,

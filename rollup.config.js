@@ -50,9 +50,7 @@ module.exports = {
       },
     }),
     typescript(),
-    babel({
-      presets: [['@babel/env', { modules: false }]],
-    }),
+    babel(),
     terser({
       output: {
         comments: (_, { type, value }) => {

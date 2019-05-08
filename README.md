@@ -1,6 +1,6 @@
 # Vanilla Carousel 🎠
 
-A simple, small (1.86kb) and easy to use plain vanilla carousel. See the
+A simple, small (2.1kB) and easy to use plain vanilla carousel. See the
 [Demo](https://muuvmuuv.github.io/vanilla-carousel/) or a live example on
 [www.additive-net.de](https://www.additive.lcl/de/messtechnik-sensorik) or
 [www.m8finder.net](https://www.m8finder.net/).
