@@ -1,5 +1,5 @@
 /*!
- * VanillaCarousel v1.7.0
+ * VanillaCarousel v1.8.0
  * https://github.com/muuvmuuv/vanilla-carousel
  *
  * Copyright 2019 Marvin Heilemann
